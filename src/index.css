@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", serif;
+  --font-heading: "Manrope", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-dawn-sand: #FAF4EA;
+  --color-dawn-card: #FFFFFF;
+  --color-terracotta: #C96A3F;
+  --color-terracotta-soft: #E08354;
+  --color-deepgreen: #3B6255;
+  --color-deepgreen-glow: #5C8B7A;
+  --color-gold: #D4A24C;
+  --color-night: #1B2A41;
+  --color-night-dark: #0E1620;
+  --color-sos: #B8382D;
+  --color-text-subtle: #5B6779;
+}
+
+:root {
+  color-scheme: light;
+}
+
+.dark-theme {
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-body);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Texture subtile en overlay organique */
+.bg-grain {
+  background-image: radial-gradient(rgba(27, 42, 65, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.dark-theme .bg-grain {
+  background-image: radial-gradient(rgba(244, 233, 216, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+

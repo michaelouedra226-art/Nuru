@@ -1,0 +1,6 @@
+{
+  "name": "Nuru",
+  "description": "Application d'accompagnement à la continence sexuelle pour la jeunesse africaine, 100% hors-ligne, ancrée dans la science comportementale et la dignité.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
