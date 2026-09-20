@@ -41,6 +41,25 @@ export default function App() {
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
   const [milestoneDays, setMilestoneDays] = useState<number | null>(null);
   const [showCheckInBanner, setShowCheckInBanner] = useState<boolean>(false);
+  const [currentTime, setCurrentTime] = useState<string>(() => {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    return `${h}:${m}`;
+  });
+
+  // Horloge dynamique temps réel de la barre d'état
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      setCurrentTime(`${h}:${m}`);
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Synchronisation persistante du state
   useEffect(() => {
@@ -321,7 +340,7 @@ export default function App() {
       <div className="relative flex h-screen sm:h-[844px] w-full max-w-[412px] flex-col overflow-hidden bg-[#FAF4EA] shadow-2xl sm:rounded-[36px] sm:border-[6px] sm:border-[#1B2A41]/20">
         {/* Barre d'état smartphone stylisée avec nom discret ou leurre */}
         <div className="relative z-40 flex items-center justify-between px-6 pt-3 pb-1 text-[11px] font-semibold text-[#1B2A41]/70">
-          <span className="font-mono">09:41</span>
+          <span className="font-mono">{currentTime}</span>
           <div className="flex items-center gap-1.5">
             <span className="text-[10px] uppercase tracking-wider text-[#5B6779]">
               {state.settings.decoyMode ? state.settings.decoyName : '100% Hors-Ligne'}
