@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { triggerHaptic } from '../../utils/soundAndHaptics';
 
 interface DecoyProps {
   unlockCode: string;
@@ -14,10 +15,51 @@ export const DecoyCalculatorScreen: React.FC<DecoyProps> = ({
   const [display, setDisplay] = useState('0');
   const [history, setHistory] = useState('');
 
+  const playKeySound = () => {
+    try {
+      const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.03);
+      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.035);
+    } catch {
+      // Ignorer si audio non autorisé
+    }
+  };
+
   const handlePress = (val: string) => {
+    playKeySound();
+    triggerHaptic('tap');
+
     if (val === 'C') {
       setDisplay('0');
       setHistory('');
+      return;
+    }
+
+    if (val === '±') {
+      if (display !== '0' && display !== 'Erreur') {
+        setDisplay((prev) => (prev.startsWith('-') ? prev.slice(1) : '-' + prev));
+      }
+      return;
+    }
+
+    if (val === '%') {
+      try {
+        const num = parseFloat(display);
+        if (!isNaN(num)) {
+          setDisplay(String(num / 100));
+        }
+      } catch {
+        setDisplay('Erreur');
+      }
       return;
     }
 
@@ -30,10 +72,9 @@ export const DecoyCalculatorScreen: React.FC<DecoyProps> = ({
       }
 
       try {
-        // Évaluation basique sécurisée
         const sanitized = display.replace(/×/g, '*').replace(/÷/g, '/');
         if (/^[\d+\-*/. ]+$/.test(sanitized)) {
-          // eslint-disable-next-line no-eval
+          // Calcul arithmétique pur
           const result = Function(`'use strict'; return (${sanitized})`)();
           setHistory(display + ' =');
           setDisplay(String(result));

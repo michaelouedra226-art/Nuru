@@ -11,6 +11,7 @@ import {
 } from '../icons/CustomSvgIcons';
 import { triggerHaptic } from '../../utils/soundAndHaptics';
 import { getAdaptiveGreeting, calculateCurrentRiskScore } from '../../utils/localAI';
+import { getBaobabBiologicalStage } from '../RealisticBaobabIllustration';
 
 interface HomeProps {
   state: AppState;
@@ -71,6 +72,7 @@ export const HomeScreen: React.FC<HomeProps> = ({
   const currentHour = new Date(currentTime).getHours();
   const adaptiveText = getAdaptiveGreeting(state.settings.userName, days, currentHour);
   const riskAnalysis = calculateCurrentRiskScore(state.entries, days, new Date(currentTime));
+  const bioStage = getBaobabBiologicalStage(days);
 
   const handleTapStreak = () => {
     triggerHaptic('tap');
@@ -172,6 +174,21 @@ export const HomeScreen: React.FC<HomeProps> = ({
             {String(hours).padStart(2, '0')}h · {String(minutes).padStart(2, '0')}m ·{' '}
             <span className="text-[#C96A3F] font-semibold">{String(seconds).padStart(2, '0')}s</span>
           </div>
+
+          {/* Badge du stade biologique réel du Baobab */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenProgress();
+            }}
+            className="mt-2 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3B6255]/10 border border-[#3B6255]/20 text-[11px] text-[#3B6255] font-medium hover:bg-[#3B6255]/15 transition"
+            title="Consulter l'évolution biologique du Baobab"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#3B6255] animate-pulse" />
+            <span className="font-semibold">{bioStage.stageName}</span>
+            <span className="opacity-70 text-[10px]">({bioStage.progressPercent}%)</span>
+          </button>
 
           <AnimatePresence>
             {pulseBonus && (

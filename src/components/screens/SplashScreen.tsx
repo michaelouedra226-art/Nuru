@@ -31,14 +31,20 @@ export const SplashScreen: React.FC<SplashProps> = ({ onComplete }) => {
       />
 
       <div className="relative z-10 flex flex-col items-center">
-        {/* Symbole graine/braise */}
+        {/* Icône officielle réaliste de l'application Nuru */}
         <motion.div
-          initial={{ scale: 0, opacity: 0 }}
+          initial={{ scale: 0.7, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-          className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#C96A3F] to-[#D4A24C] shadow-lg shadow-[#C96A3F]/20"
+          transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+          className="mb-5 relative flex items-center justify-center"
         >
-          <div className="h-4 w-4 rounded-full bg-[#FAF4EA] animate-ping" />
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-[#D4A24C] to-[#C96A3F] blur-lg opacity-40 animate-pulse" />
+          <img
+            src="/icon.png"
+            alt="Icône Nuru Baobab Sacré"
+            referrerPolicy="no-referrer"
+            className="relative h-20 w-20 rounded-3xl object-cover shadow-xl border border-white/20"
+          />
         </motion.div>
 
         {/* Titre Nuru en Fraunces */}

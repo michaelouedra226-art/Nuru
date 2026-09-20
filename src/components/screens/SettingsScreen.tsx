@@ -630,9 +630,26 @@ export const SettingsScreen: React.FC<SettingsProps> = ({
           </button>
 
           {openSection === 'about' && (
-            <div className="p-4 pt-0 border-t border-[#1B2A41]/5 space-y-2 text-xs text-[#5B6779] leading-relaxed">
+            <div className="p-4 pt-0 border-t border-[#1B2A41]/5 space-y-3 text-xs text-[#5B6779] leading-relaxed">
+              <div className="flex items-center gap-3 pt-3">
+                <img
+                  src="/icon.png"
+                  alt="Nuru Icon"
+                  referrerPolicy="no-referrer"
+                  className="h-12 w-12 rounded-2xl object-cover shadow-sm border border-[#1B2A41]/10"
+                />
+                <div>
+                  <h4
+                    style={{ fontFamily: 'var(--font-heading, sans-serif)' }}
+                    className="text-sm font-bold text-[#1B2A41]"
+                  >
+                    Nuru — Sanctuaire & Dignité
+                  </h4>
+                  <span className="text-[11px] text-[#C96A3F] font-mono">v1.2.0 · Édition Résilience Réaliste</span>
+                </div>
+              </div>
               <p>
-                <strong className="text-[#1B2A41]">Nuru (v1.1.0 — Sanctuaire Évolué)</strong> : Architecture 100% hors-ligne, données réelles, chiffrement AES-GCM 256 bits, audio procédural Web Audio et IA bayésienne on-device.
+                <strong className="text-[#1B2A41]">Architecture technique :</strong> 100% hors-ligne, persistance chiffrée AES-GCM 256 bits, audio procédural Web Audio (ondes thêta d’apaisement) et modélisation biologique du Baobab basée sur la neuroplasticité dopaminergique.
               </p>
               <p>
                 <strong className="text-[#1B2A41]">Positionnement clinique :</strong> Nuru ne pose aucun jugement moral. L’application accompagne les personnes traversant une perte de contrôle compulsive ou désireuses de vivre leur continence en harmonie avec leurs convictions.

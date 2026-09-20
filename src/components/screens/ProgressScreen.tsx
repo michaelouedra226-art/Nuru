@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AppState } from '../../types';
 import { AdinkraPattern } from '../AdinkraPattern';
+import { RealisticBaobabIllustration, getBaobabBiologicalStage } from '../RealisticBaobabIllustration';
 
 interface ProgressProps {
   state: AppState;
@@ -21,16 +22,7 @@ export const ProgressScreen: React.FC<ProgressProps> = ({
   );
   const hoursSaved = Math.round((currentStreakDays * 20) / 60);
 
-  // Étape du baobab selon streak
-  const getBaobabStage = (days: number) => {
-    if (days < 3) return { stage: 'Graine en terre', level: 1, desc: 'L’étincelle est posée' };
-    if (days < 14) return { stage: 'Jeune pousse', level: 2, desc: 'Première tige vers le ciel' };
-    if (days < 60) return { stage: 'Jeune arbre', level: 3, desc: 'Racines bien ancrées' };
-    if (days < 180) return { stage: 'Baobab vigoureux', level: 4, desc: 'Tronc massif résilient' };
-    return { stage: 'Grand Baobab séculaire', level: 5, desc: 'Cime éternelle & oiseaux du ciel' };
-  };
-
-  const baobabInfo = getBaobabStage(currentStreakDays);
+  const baobabInfo = getBaobabBiologicalStage(currentStreakDays);
 
   const now = Date.now();
   const dayMs = 86400 * 1000;
@@ -105,77 +97,12 @@ export const ProgressScreen: React.FC<ProgressProps> = ({
       </div>
 
       <div className="relative z-10 flex-1 overflow-y-auto pr-1 py-1 space-y-4">
-        {/* Visuel du Baobab SVG évolutif */}
-        <div className="relative flex flex-col items-center justify-center rounded-3xl border border-[#1B2A41]/10 bg-white p-6 shadow-xs text-center">
-          <div className="relative h-40 w-40 flex items-center justify-center">
-            {/* Halo de terre et soleil */}
-            <div className="absolute h-32 w-32 rounded-full bg-gradient-to-t from-[#C96A3F]/15 via-[#D4A24C]/20 to-transparent blur-xl" />
-
-            <svg width="140" height="140" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Sol */}
-              <path d="M10 85 Q50 82 90 85" stroke="#1B2A41" strokeWidth="2" strokeLinecap="round" />
-              <path d="M25 89 Q50 87 75 89" stroke="#C96A3F" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-
-              {/* Soleil Levant d'aube pour niveaux >= 3 */}
-              {baobabInfo.level >= 3 && (
-                <circle cx="78" cy="24" r="8" fill="#D4A24C" opacity="0.4" />
-              )}
-
-              {/* Arbre selon niveau */}
-              {baobabInfo.level === 1 && (
-                /* Graine en terre */
-                <g>
-                  <circle cx="50" cy="80" r="5" fill="#C96A3F" />
-                  <path d="M50 75 Q52 70 54 68" stroke="#3B6255" strokeWidth="2" strokeLinecap="round" />
-                </g>
-              )}
-
-              {baobabInfo.level === 2 && (
-                /* Jeune pousse */
-                <g>
-                  <path d="M50 85 Q50 65 48 55" stroke="#3B6255" strokeWidth="4" strokeLinecap="round" />
-                  <path d="M48 62 Q38 58 35 64 Q42 68 48 64" fill="#5C8B7A" />
-                  <path d="M49 57 Q58 52 62 57 Q56 62 49 58" fill="#5C8B7A" />
-                </g>
-              )}
-
-              {baobabInfo.level >= 3 && (
-                /* Tronc Baobab puissant */
-                <g>
-                  {/* Tronc massif */}
-                  <path
-                    d="M38 85 C36 70 40 55 44 45 C44 45 42 35 34 26 C38 28 44 32 46 38 C47 32 50 22 50 18 C52 24 53 32 54 38 C56 32 62 28 66 26 C58 35 56 45 56 45 C60 55 64 70 62 85 Z"
-                    fill="#3B6255"
-                  />
-                  {/* Textures d'écorce mandingue */}
-                  <path d="M46 72 Q50 68 54 72" stroke="#FAF4EA" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
-                  <path d="M44 58 Q50 54 56 58" stroke="#FAF4EA" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
-
-                  {/* Feuillage / cime */}
-                  <ellipse cx="50" cy="22" rx="26" ry="14" fill="#5C8B7A" opacity="0.85" />
-                  <ellipse cx="36" cy="26" rx="14" ry="10" fill="#3B6255" opacity="0.75" />
-                  <ellipse cx="64" cy="26" rx="14" ry="10" fill="#3B6255" opacity="0.75" />
-
-                  {/* Oiseaux libres pour niveau >= 4 */}
-                  {baobabInfo.level >= 4 && (
-                    <g>
-                      <path d="M22 20 Q25 17 28 20 Q31 17 34 20" stroke="#1B2A41" strokeWidth="1.2" strokeLinecap="round" fill="none" />
-                      <path d="M72 14 Q74 12 76 14 Q78 12 80 14" stroke="#1B2A41" strokeWidth="1.2" strokeLinecap="round" fill="none" />
-                    </g>
-                  )}
-                </g>
-              )}
-            </svg>
-          </div>
-
-          <span
-            style={{ fontFamily: 'var(--font-heading, sans-serif)' }}
-            className="mt-2 text-base font-bold text-[#1B2A41]"
-          >
-            {baobabInfo.stage}
-          </span>
-          <span className="text-xs text-[#5B6779]">{baobabInfo.desc}</span>
-        </div>
+        {/* Visuel du Baobab biologique réaliste avec ciel circadien */}
+        <RealisticBaobabIllustration
+          days={currentStreakDays}
+          size="standard"
+          showDetailsCard={true}
+        />
 
         {/* Chiffres & statistiques assumées */}
         <div className="grid grid-cols-2 gap-2.5">
