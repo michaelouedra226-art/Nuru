@@ -71,13 +71,13 @@ export function analyzeVulnerability(entries: JournalEntry[], sosCount: number):
   const topTriggerName = topTriggers[0] || 'Ennui';
   const dayName = DAYS_FR[maxDay];
 
-  const suggestion = `Tu es plus vulnérable le ${dayName.toLowerCase()} vers ${maxHourBucket}, principalement déclenché par : ${topTriggerName}. Prévois un rituel d'ancrage doux 30 min avant.`;
+  const suggestion = `Tu es plus sensible le ${dayName.toLowerCase()} vers ${maxHourBucket}, principalement déclenché par : ${topTriggerName}. Prévois un rituel d'ancrage doux 30 min avant.`;
 
   return {
     criticalDayOfWeek: dayName,
     criticalHourRange: maxHourBucket,
-    topTriggers: topTriggers.length > 0 ? topTriggers : ['Ennui', 'Nuit'],
-    sosSuccessRate: sosCount > 0 ? Math.min(95, 70 + sosCount * 4) : 80,
+    topTriggers,
+    sosSuccessRate: sosCount > 0 ? 100 : 0,
     totalSosCount: sosCount,
     suggestion,
   };

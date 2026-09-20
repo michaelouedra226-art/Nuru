@@ -15,6 +15,7 @@ interface SosProps {
   onClose: () => void;
   onSosCompleted: () => void;
   onNavigateToJournal: () => void;
+  onNavigateToSettings?: () => void;
 }
 
 type BreathPhase = 'inspire' | 'hold' | 'expire';
@@ -25,12 +26,14 @@ export const SosScreen: React.FC<SosProps> = ({
   onClose,
   onSosCompleted,
   onNavigateToJournal,
+  onNavigateToSettings,
 }) => {
   const [phase, setPhase] = useState<BreathPhase>('inspire');
   const [secondsRemaining, setSecondsRemaining] = useState<number>(4);
   const [completedCycles, setCompletedCycles] = useState<number>(0);
   const [showExitConfirm, setShowExitConfirm] = useState<boolean>(false);
   const [showVictoryGraine, setShowVictoryGraine] = useState<boolean>(false);
+  const [contactMissingNotice, setContactMissingNotice] = useState<boolean>(false);
   const [quoteIndex, setQuoteIndex] = useState<number>(0);
   const [soundMode, setSoundMode] = useState<SoundOption>(
     state.settings.ambientSoundType || 'theta'
@@ -109,7 +112,7 @@ export const SosScreen: React.FC<SosProps> = ({
     if (state.settings.trustedContactNumber) {
       window.location.href = `tel:${state.settings.trustedContactNumber}`;
     } else {
-      alert("Aucun numéro n'a été configuré dans les Réglages. Tu peux en ajouter un dès maintenant.");
+      setContactMissingNotice(true);
     }
   };
 
@@ -286,6 +289,52 @@ export const SosScreen: React.FC<SosProps> = ({
                   className="rounded-2xl border border-[#1B2A41]/15 bg-transparent py-2.5 text-xs font-medium text-[#5B6779] hover:text-[#1B2A41] transition"
                 >
                   Quitter le sanctuaire
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Alerte Contact de confiance manquant */}
+      <AnimatePresence>
+        {contactMissingNotice && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6 backdrop-blur-xs">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="w-full max-w-xs rounded-3xl bg-[#FAF4EA] p-6 text-[#1B2A41] shadow-2xl"
+            >
+              <h3
+                style={{ fontFamily: 'var(--font-heading, sans-serif)' }}
+                className="text-base font-bold text-[#1B2A41]"
+              >
+                Contact de confiance
+              </h3>
+              <p className="mt-2 text-xs text-[#5B6779] leading-relaxed">
+                Aucun numéro n'est encore enregistré dans tes paramètres. Tu peux en associer un pour pouvoir l'appeler d'un clic en cas de vague intense.
+              </p>
+
+              <div className="mt-5 flex flex-col gap-2">
+                {onNavigateToSettings && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setContactMissingNotice(false);
+                      onNavigateToSettings();
+                    }}
+                    className="rounded-2xl bg-[#3B6255] py-3 text-xs font-bold text-white shadow-xs hover:bg-[#2f4f44] transition"
+                  >
+                    Ouvrir les Réglages
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setContactMissingNotice(false)}
+                  className="rounded-2xl border border-[#1B2A41]/15 bg-transparent py-2.5 text-xs font-medium text-[#5B6779] hover:text-[#1B2A41] transition"
+                >
+                  Fermer
                 </button>
               </div>
             </motion.div>

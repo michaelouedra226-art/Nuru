@@ -23,7 +23,8 @@ export const DecoyCalculatorScreen: React.FC<DecoyProps> = ({
 
     if (val === '=') {
       // Vérifier si la saisie correspond au code de déverrouillage de Nuru
-      if (display === unlockCode || display === '1984' || display === '123456') {
+      const targetPin = unlockCode?.trim() || '1234';
+      if (display === targetPin) {
         onUnlockNuru();
         return;
       }

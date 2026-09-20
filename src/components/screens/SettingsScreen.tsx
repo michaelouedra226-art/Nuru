@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { AppSettings, AppState } from '../../types';
 import { AdinkraPattern } from '../AdinkraPattern';
 import { exportStateToJson, exportStateEncrypted, importStateFromJson, clearAllData } from '../../utils/storage';
@@ -38,6 +38,7 @@ export const SettingsScreen: React.FC<SettingsProps> = ({
   const [importPinInput, setImportPinInput] = useState('');
   const [biometricAvailable, setBiometricAvailable] = useState(false);
   const [exportEncryptedMode, setExportEncryptedMode] = useState(true);
+  const [statusBanner, setStatusBanner] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
   // État local pour le sélecteur de date réelle
   const currentStartDate = new Date(appState.currentCycleStart);
@@ -93,7 +94,7 @@ export const SettingsScreen: React.FC<SettingsProps> = ({
         triggerHaptic('victory');
         onRestoreState(imported);
         setImportError(null);
-        alert('Sauvegarde restaurée avec succès.');
+        setStatusBanner({ message: 'Sauvegarde restaurée avec succès.', type: 'success' });
       } else {
         setImportError('Fichier invalide ou code PIN incorrect pour le déchiffrement.');
       }
@@ -107,11 +108,13 @@ export const SettingsScreen: React.FC<SettingsProps> = ({
       if (ok) {
         onUpdateSettings({ biometricsEnabled: true });
         triggerHaptic('victory');
+        setStatusBanner({ message: 'Authentification biométrique activée avec succès.', type: 'success' });
       } else {
-        alert("Enregistrement biométrique impossible ou refusé par l'appareil.");
+        setStatusBanner({ message: "Enregistrement biométrique impossible ou refusé par l'appareil.", type: 'error' });
       }
     } else {
       onUpdateSettings({ biometricsEnabled: false });
+      setStatusBanner({ message: 'Authentification biométrique désactivée.', type: 'info' });
     }
   };
 
@@ -134,8 +137,9 @@ export const SettingsScreen: React.FC<SettingsProps> = ({
       triggerHaptic('tap');
       onUpdateCycleStart(parsed);
       setInputDate(dateTimeString);
+      setStatusBanner({ message: 'Date de point de départ mise à jour avec succès.', type: 'success' });
     } else if (parsed > Date.now()) {
-      alert('La date de départ ne peut pas être dans le futur.');
+      setStatusBanner({ message: 'La date de départ ne peut pas être dans le futur.', type: 'error' });
     }
   };
 
@@ -178,6 +182,33 @@ export const SettingsScreen: React.FC<SettingsProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Notification Toast/Banner */}
+      <AnimatePresence>
+        {statusBanner && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            className={`relative z-10 mb-3 flex items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-medium border ${
+              statusBanner.type === 'success'
+                ? 'bg-[#3B6255]/10 text-[#3B6255] border-[#3B6255]/20'
+                : statusBanner.type === 'error'
+                ? 'bg-rose-50 text-rose-700 border-rose-200'
+                : 'bg-[#1B2A41]/10 text-[#1B2A41] border-[#1B2A41]/20'
+            }`}
+          >
+            <span>{statusBanner.message}</span>
+            <button
+              type="button"
+              onClick={() => setStatusBanner(null)}
+              className="ml-2 text-current opacity-60 hover:opacity-100 transition text-sm leading-none"
+            >
+              ×
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="relative z-10 flex-1 overflow-y-auto pr-1 py-1 space-y-3">
         {/* 1. Jalon Réel & Date de Départ */}

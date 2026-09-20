@@ -422,6 +422,7 @@ export default function App() {
                   onClose={() => setCurrentView('home')}
                   onSosCompleted={handleSosCompleted}
                   onNavigateToJournal={() => setCurrentView('journal')}
+                  onNavigateToSettings={() => setCurrentView('settings')}
                 />
               </motion.div>
             )}

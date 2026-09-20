@@ -181,14 +181,20 @@ export const JournalScreen: React.FC<JournalProps> = ({
                 Top déclencheurs identifiés
               </h3>
               <div className="flex flex-wrap gap-2">
-                {report.topTriggers.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-xl bg-[#FAF4EA] border border-[#1B2A41]/10 px-3 py-1.5 text-xs font-semibold text-[#1B2A41]"
-                  >
-                    {t}
+                {report.topTriggers.length > 0 ? (
+                  report.topTriggers.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-xl bg-[#FAF4EA] border border-[#1B2A41]/10 px-3 py-1.5 text-xs font-semibold text-[#1B2A41]"
+                    >
+                      {t}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-xs text-[#5B6779] italic">
+                    Aucun déclencheur identifié pour le moment.
                   </span>
-                ))}
+                )}
               </div>
             </div>
           </div>
